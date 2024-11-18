@@ -1,0 +1,75 @@
+<div class="w-full mt-16 lg:px-40 justify-center container mx-auto my-auto">
+    <div class="flex flex-wrap w-full lg:w-auto">
+        <div class="w-full lg:w-1/2 flex rounded-lg bg-auto"
+            style="background-image: url('https://images.unsplash.com/photo-1559963110-71b394e7494d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=675&q=80')">
+            <div class="rounded-lg py-6 pl-8 pr-32 w-full bg-blue-400 opacity-90 text-white">
+                <div class="mb-20">
+                    <h2 class="font-bold text-3xl leading-none pb-1">{{currentDayName}}</h2>
+                    <h3 class="leading-none pb-2 pl-1">{{currentDay}}/{{currentMonth}}/{{currentYear}}</h3>
+                    <p class="flex align-center opacity-75">
+                        <svg class="w-4 inline mr-1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                            viewBox="0 0 425.963 425.963" style="width:16px; height:16px;" xml:space="preserve">
+                            <g>
+                                <g>
+                                    <path
+                                        d="M213.285,0h-0.608C139.114,0,79.268,59.826,79.268,133.361c0,48.202,21.952,111.817,65.246,189.081   c32.098,57.281,64.646,101.152,64.972,101.588c0.906,1.217,2.334,1.934,3.847,1.934c0.043,0,0.087,0,0.13-0.002   c1.561-0.043,3.002-0.842,3.868-2.143c0.321-0.486,32.637-49.287,64.517-108.976c43.03-80.563,64.848-141.624,64.848-181.482   C346.693,59.825,286.846,0,213.285,0z M274.865,136.62c0,34.124-27.761,61.884-61.885,61.884   c-34.123,0-61.884-27.761-61.884-61.884s27.761-61.884,61.884-61.884C247.104,74.736,274.865,102.497,274.865,136.62z"
+                                        fill="#FFFFFF" />
+                                </g>
+                            </g>
+                        </svg>
+                        {{ locationComputed()?.name }}, {{ locationComputed()?.country }}
+                    </p>
+
+                </div>
+                <div>
+                    <img [src]="currentComputed()?.condition?.icon" alt="Weather Icon" class="">
+
+                    <strong class="leading-none text-6xl block font-weight-bolder">{{roundTemp(currentComputed()?.temp_c)}}
+                        ºC</strong>
+                    <b class="text-2xl block font-bold">{{currentComputed()?.condition?.text}}</b>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex ml-0">
+            <div class="lg:my-3 bg-gray-800 text-white p-8 lg:rounded-r-lg w-full">
+                <div class="flex justify-between w-64 mb-4 w-full">
+                    <div class="w-auto font-bold uppercase text-90">Lluvia (mm)</div>
+                    <div class="w-auto text-right">{{currentComputed()?.precip_mm}}</div>
+                </div>
+                <div class="flex justify-between w-64 mb-4 w-full">
+                    <div class="w-auto font-bold uppercase text-90">Humedad</div>
+                    <div class="w-auto text-right">{{currentComputed()?.humidity}} %</div>
+                </div>
+                <div class="flex justify-between w-64 mb-8 w-full">
+                    <div class="w-auto font-bold uppercase text-90">Viento</div>
+                    <div class="w-auto text-right">{{currentComputed()?.wind_kph}} km/h</div>
+                </div>
+                <div class="flex flex-row">
+                    @for(forecastDay of forecastComputed()?.forecastday; track $index){
+                    <div [ngClass]="[
+                        'flex', 
+                        'flex-col', 
+                        'w-1/4',
+                        'rounded-lg', 
+                        'pb-4', 
+                        $first ? 'bg-gray-100 text-black' : 'bg-gray-900'
+                      ]">
+                        <div class="text-center pt-2 mb-2 flex justify-center">
+                            <img [src]="forecastDay.day.condition.icon" alt="Weather Icon" class="w-16">
+                        </div>
+                        <div class="text-center">
+                            <b class="font-normal">{{dayNameFromEpoch(forecastDay.date_epoch)}}</b><br>
+                            <strong class="text-xl">{{roundTemp(forecastDay.day.avgtemp_c)}}ºC</strong>
+                        </div>
+                    </div>
+                    }
+                    @empty {
+                        <div class="text-center text-2xl text-white w-full">La previsión no está disponible</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
