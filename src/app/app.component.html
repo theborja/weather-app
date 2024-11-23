@@ -1,3 +1,11 @@
-<app-weather-card/>
-
-<router-outlet />
+<div class="min-h-screen flex flex-col">
+    <div class="flex-grow">
+      <app-city-selector (citySelected)="updateCity($event)"></app-city-selector>
+      <app-weather-card [city]="selectedCity || defaultCity"></app-weather-card>
+    </div>
+  
+    <footer class="w-full flex justify-center items-center p-4 bg-blue-500 mt-16">
+        <p class="text-white">Hecho con ❤️ por <a href="https://github.com/theborja" target="_blank" class="font-bold">Borja Tovar</a></p>
+    </footer>
+</div>
+  

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Forecast } from '../interfaces/weather.model';
 
 @Injectable({
@@ -14,6 +14,12 @@ export class WeatherService {
   
 
   getForecast(city: string): Observable<Forecast> {
-    return this.http.get<Forecast>(`${this.apiUrl}?key=${this.apiKey}&q=${city}&days=4&aqi=no&alerts=no&lang=es`);
+    return this.http.get<Forecast>(`${this.apiUrl}?key=${this.apiKey}&q=${city}&days=4&aqi=no&alerts=no&lang=es`).pipe(
+      catchError((error) => {
+        console.error('Error fetching forecast', error);
+        return throwError(() => new Error('Error fetching forecast'));
+      }
+    )
+    );
   }
 }

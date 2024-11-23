@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, Input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
 import { WeatherService } from '../../services/weather.service';
 import { Forecast } from '../../interfaces/weather.model';
 import { CommonModule } from '@angular/common';
@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './weather-card.component.html',
   styleUrl: './weather-card.component.css'
 })
-export class WeatherCardComponent implements OnInit {
-
+export class WeatherCardComponent implements OnChanges {
+  @Input() city: string ='';
   #weatherSignal = signal<Forecast>({});
 
   public locationComputed = computed(() => this.#weatherSignal()?.location);
@@ -25,15 +25,24 @@ export class WeatherCardComponent implements OnInit {
   public currentMonth = this.currentDate.getMonth();
   public currentYear = this.currentDate.getFullYear();
 
-  constructor(private weatherService: WeatherService) {
+  public showData = false;
+
+  constructor(private weatherService: WeatherService,
+    private cdr: ChangeDetectorRef
+  ) {
 
   }
-
-  ngOnInit(): void {
-    this.weatherService.getForecast('Madrid').subscribe((data) => {
-      this.#weatherSignal.set(data);
-
-      console.log(data);
+  ngOnChanges(changes: SimpleChanges): void {
+    this.showData = true;
+    this.weatherService.getForecast(this.city).subscribe({
+      next: (data) => { 
+        this.#weatherSignal.set(data);
+        this.showData = true;
+      },
+      error: (err) => {
+        this.showData = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
