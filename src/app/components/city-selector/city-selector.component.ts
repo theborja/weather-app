@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Signal, signal } from '@angular/core';
+import { Component, EventEmitter, Output, Signal, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './city-selector.component.css'
 })
 export class CitySelectorComponent {
-  cityInput: Signal<string> = signal('');
+  cityInput: WritableSignal<string> = signal('');
   @Output() citySelected = new EventEmitter<string>();
 
   public selectCity(){
