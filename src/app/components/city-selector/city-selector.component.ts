@@ -2,11 +2,10 @@ import { Component, EventEmitter, Output, Signal, signal, WritableSignal } from 
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-city-selector',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './city-selector.component.html',
-  styleUrl: './city-selector.component.css'
+    selector: 'app-city-selector',
+    imports: [FormsModule],
+    templateUrl: './city-selector.component.html',
+    styleUrl: './city-selector.component.css'
 })
 export class CitySelectorComponent {
   cityInput: WritableSignal<string> = signal('');

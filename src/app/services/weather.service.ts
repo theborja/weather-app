@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Forecast } from '../interfaces/weather.model';
@@ -7,10 +7,10 @@ import { Forecast } from '../interfaces/weather.model';
   providedIn: 'root',
 })
 export class WeatherService {
+  private http = inject(HttpClient);
+
   private apiKey = '398e62e50d0e4a0d80e181432241811';
   private apiUrl = 'https://api.weatherapi.com/v1/forecast.json';
-
-  constructor(private http: HttpClient) {}
   
 
   getForecast(city: string): Observable<Forecast> {
