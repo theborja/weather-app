@@ -1,8 +1,6 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
 import { WeatherCardComponent } from "./components/weather-card/weather-card.component";
 import { CitySelectorComponent } from "./components/city-selector/city-selector.component";
-import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-root',

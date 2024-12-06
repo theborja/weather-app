@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, OnChanges, OnInit, signal, SimpleChanges, input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnChanges, signal, input, inject } from '@angular/core';
 import { WeatherService } from '../../services/weather.service';
 import { Forecast } from '../../interfaces/weather.model';
 import { CommonModule } from '@angular/common';
@@ -29,14 +29,14 @@ export class WeatherCardComponent implements OnChanges {
 
   public showData = false;
   
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.showData = true;
     this.weatherService.getForecast(this.city()).subscribe({
       next: (data) => { 
         this.#weatherSignal.set(data);
         this.showData = true;
       },
-      error: (err) => {
+      error: () => {
         this.showData = false;
         this.cdr.detectChanges();
       }
