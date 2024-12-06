@@ -20,6 +20,8 @@ export class WeatherCardComponent implements OnChanges {
   public currentComputed = computed(() => this.#weatherSignal()?.current);
   public forecastComputed = computed(() => this.#weatherSignal()?.forecast);
 
+  public isFavorite = signal(false);
+
 
   public currentDate = new Date();
   public currentDay = this.currentDate.getDate();
@@ -31,6 +33,7 @@ export class WeatherCardComponent implements OnChanges {
   
   ngOnChanges(): void {
     this.showData = true;
+    this.isFavorite.set(this.weatherService.cities().includes(this.city()));
     this.weatherService.getForecast(this.city()).subscribe({
       next: (data) => { 
         this.#weatherSignal.set(data);
@@ -63,6 +66,26 @@ export class WeatherCardComponent implements OnChanges {
 
   private toCamelCase(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  public addFav(): void {
+    this.weatherService.addFav(this.locationComputed()!.name);
+    this.isFavorite.set(true);
+  }
+
+  public deleteFav(): void {
+    this.isFavorite.set(false);
+    this.weatherService.deleteFav(this.locationComputed()!.name);
+  }
+
+  onSvgKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {  // Teclas 'Enter' o 'Space'
+      if(!this.isFavorite()){
+        this.addFav();
+      }else{
+          this.deleteFav();
+      }
+    }
   }
 
 }

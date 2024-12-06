@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Forecast } from '../interfaces/weather.model';
@@ -11,6 +11,10 @@ export class WeatherService {
 
   private apiKey = '398e62e50d0e4a0d80e181432241811';
   private apiUrl = 'https://api.weatherapi.com/v1/forecast.json';
+
+  #favsSignal = signal<string[]>([]);
+  public cities = computed(() => this.#favsSignal());
+
   
 
   getForecast(city: string): Observable<Forecast> {
@@ -21,5 +25,13 @@ export class WeatherService {
       }
     )
     );
+  }
+
+  addFav(city: string): void {
+    this.#favsSignal.update(favs => [...favs, city]);
+  }
+
+  deleteFav(city: string): void {
+    this.#favsSignal.update(favs => favs.filter(fav => fav !== city));
   }
 }

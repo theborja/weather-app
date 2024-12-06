@@ -1,0 +1,24 @@
+aside {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  aside ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  aside li {
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+  }
+  
+  aside li:hover {
+    background-color: #e0e0e0;
+  }
+  

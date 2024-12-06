@@ -1,11 +1,18 @@
 <div class="min-h-screen flex flex-col">
-    <div class="flex-grow">
+  <!-- Contenedor principal -->
+  <div class="flex-grow relative flex">
+    <app-fav-cities-list (citySelected)="updateCity($event)" class="absolute top-1/4 left-4"/>
+    <div class="flex-grow p-4">
       <app-city-selector (citySelected)="updateCity($event)"></app-city-selector>
       <app-weather-card [city]="selectedCity || defaultCity"></app-weather-card>
     </div>
-  
-    <footer class="w-full flex justify-center items-center p-4 bg-blue-500 mt-16">
-        <p class="text-white">Hecho con ❤️ por <a href="https://github.com/theborja" target="_blank" class="font-bold">Borja Tovar</a></p>
-    </footer>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full flex justify-center items-center p-4 bg-blue-500 mt-16">
+    <p class="text-white">
+      Hecho con ❤️ por
+      <a href="https://github.com/theborja" target="_blank" class="font-bold">Borja Tovar</a>
+    </p>
+  </footer>
 </div>
-  
