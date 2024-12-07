@@ -1,15 +1,17 @@
-import { ChangeDetectorRef, Component, computed, OnChanges, signal, input, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, signal, input, inject } from '@angular/core';
 import { WeatherService } from '../../services/weather.service';
 import { Forecast } from '../../interfaces/weather.model';
 import { CommonModule } from '@angular/common';
+import { toObservable } from '@angular/core/rxjs-interop';
+
 
 @Component({
-    selector: 'app-weather-card',
-    imports: [CommonModule],
-    templateUrl: './weather-card.component.html',
-    styleUrl: './weather-card.component.css'
+  selector: 'app-weather-card',
+  imports: [CommonModule],
+  templateUrl: './weather-card.component.html',
+  styleUrl: './weather-card.component.css'
 })
-export class WeatherCardComponent implements OnChanges {
+export class WeatherCardComponent {
   private weatherService = inject(WeatherService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -30,20 +32,25 @@ export class WeatherCardComponent implements OnChanges {
   public currentYear = this.currentDate.getFullYear();
 
   public showData = false;
-  
-  ngOnChanges(): void {
-    this.showData = true;
-    this.isFavorite.set(this.weatherService.cities().includes(this.city()));
-    this.weatherService.getForecast(this.city()).subscribe({
-      next: (data) => { 
-        this.#weatherSignal.set(data);
+
+  constructor() {
+    toObservable(this.city).subscribe({
+      next: () => {
         this.showData = true;
-      },
-      error: () => {
-        this.showData = false;
-        this.cdr.detectChanges();
+        this.isFavorite.set(this.weatherService.cities().includes(this.city()));
+        this.weatherService.getForecast(this.city()).subscribe({
+          next: (data) => {
+            this.#weatherSignal.set(data);
+            this.showData = true;
+          },
+          error: () => {
+            this.showData = false;
+            this.cdr.detectChanges();
+          }
+        });
       }
     });
+
   }
 
   dayNameFromEpoch(epoch?: number): string {
@@ -69,22 +76,22 @@ export class WeatherCardComponent implements OnChanges {
   }
 
   public addFav(): void {
-    const fav = this.locationComputed()!.name +', '+ this.locationComputed()!.country;
+    const fav = this.locationComputed()!.name + ', ' + this.locationComputed()!.country;
     this.weatherService.addFav(fav);
     this.isFavorite.set(true);
   }
 
   public deleteFav(): void {
-    const fav = this.locationComputed()!.name +', '+ this.locationComputed()!.country;
+    const fav = this.locationComputed()!.name + ', ' + this.locationComputed()!.country;
     this.isFavorite.set(false);
     this.weatherService.deleteFav(fav);
   }
 
   onSvgKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') { 
-      if(!this.isFavorite()){
+    if (event.key === 'Enter') {
+      if (!this.isFavorite()) {
         this.addFav();
-      }else{
+      } else {
         this.deleteFav();
       }
     }
