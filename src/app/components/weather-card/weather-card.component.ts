@@ -69,21 +69,23 @@ export class WeatherCardComponent implements OnChanges {
   }
 
   public addFav(): void {
-    this.weatherService.addFav(this.locationComputed()!.name);
+    const fav = this.locationComputed()!.name +', '+ this.locationComputed()!.country;
+    this.weatherService.addFav(fav);
     this.isFavorite.set(true);
   }
 
   public deleteFav(): void {
+    const fav = this.locationComputed()!.name +', '+ this.locationComputed()!.country;
     this.isFavorite.set(false);
-    this.weatherService.deleteFav(this.locationComputed()!.name);
+    this.weatherService.deleteFav(fav);
   }
 
   onSvgKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {  // Teclas 'Enter' o 'Space'
+    if (event.key === 'Enter') { 
       if(!this.isFavorite()){
         this.addFav();
       }else{
-          this.deleteFav();
+        this.deleteFav();
       }
     }
   }
