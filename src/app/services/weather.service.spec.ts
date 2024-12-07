@@ -86,4 +86,14 @@ describe('WeatherService', () => {
         expect(req.request.method).toBe('GET');
         req.flush('Error fetching forecast', { status: 404, statusText: 'Not Found' });
     });
+
+    it('should add a city to favorites', () => {
+        service.addFav('London');
+        expect(service.cities()).toContain('London');
+    });
+    it('should delete a city from favorites', () => {
+        service.addFav('London');
+        service.deleteFav('London');
+        expect(service.cities()).not.toContain('London');
+    });
 });
